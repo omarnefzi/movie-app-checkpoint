@@ -1,26 +1,29 @@
 import { TextField } from "@mui/material";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import CardMovies from "../components/CardMovies";
-import Data from "../data/MovieData";
+import { addMovie } from "../redux/actions/moviesAction";
+
 
 const Movies = () => {
-  const [movies, setMovies] = useState(Data);
+  const moviesList= useSelector(state=>state.moviesReducer.movies)
+const dispatch=useDispatch()
+
   const [search, setSearch] = useState("");
   const [newmovies, setNewMovies] = useState({
     title: "",
     description: "",
     img: "",
     rating: "",
-    id: movies.id + 1,
+    id: moviesList.id + 1,
   });
   const handleChange = (e) => {
     setNewMovies({ ...newmovies, [e.target.name]: e.target.value });
   };
-  const addMovie = () => {
-    setMovies([...movies, newmovies]);
-  };
-  const filterMovies = movies.filter((movie) => {
+ 
+  const filterMovies = moviesList.filter((movie) => {
     return movie.title.toLocaleLowerCase().includes(search.toLocaleLowerCase());
   });
   return (
@@ -74,7 +77,7 @@ const Movies = () => {
           placeholder="add rating"
           name="rating"
         />
-        <Button onClick={addMovie}>Add</Button>
+        <Button onClick={()=> dispatch(addMovie(newmovies))}>Add</Button>
       </form>
     </>
   );

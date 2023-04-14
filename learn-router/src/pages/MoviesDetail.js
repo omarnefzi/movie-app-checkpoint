@@ -1,26 +1,32 @@
-import React from 'react';
-import { Button } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router';
-import Data from '../data/MovieData';
+import { Button } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 
 const MoviesDetails = () => {
   const { id } = useParams();
-  const findMovies = Data.find((movie) => movie.id === +id);
- const backbtn= useNavigate() 
- 
-  
-  return (
-<>
-<div>
-      <h1>{findMovies.title}</h1>
-      <img src={findMovies.posterURL} />
-      <h3>{findMovies.description}</h3>
-    
-<p> trailer :   <a href="">  {findMovies.trailer} </a> </p>
-    </div>
 
-    <Button onClick={()=>backbtn('/')}  variant='success'>back to home page</Button>
-</>
+  const movieDetail = useSelector((state) => state.moviesReducer.movies);
+  const seeDetails = movieDetail.find((movie) => movie.id === +id);
+
+  const backbtn = useNavigate();
+
+  return (
+    <>
+      <div>
+        <h1>{seeDetails.title}</h1>
+        <img src={seeDetails.posterURL} />
+        <h3>{seeDetails.description}</h3>
+
+        <p>
+          {" "}
+          trailer : <a href=""> {seeDetails.trailer} </a>{" "}
+        </p>
+      </div>
+
+      <Button onClick={() => backbtn("/")} variant="success">
+        back to home page
+      </Button>
+    </>
   );
 };
 
